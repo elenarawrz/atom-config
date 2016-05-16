@@ -1,0 +1,52 @@
+"*":
+  "atom-beautify":
+    _analyticsUserId: "760caa09-d8b4-4929-b907-40d82ee86824"
+    beautifyEntireFileOnSave: false
+    cfml_preserve_newlines: false
+    css_indent_comments: false
+    css_newline_between_rules: true
+    general:
+      _analyticsUserId: "ded55c67-99e3-4b6c-be6e-8fa7d253cbe2"
+    html_indent_inner_html: true
+    js_end_with_comma: true
+  core:
+    closeEmptyWindows: false
+    disabledPackages: [
+      "git-history"
+    ]
+    openEmptyEditorOnStart: false
+  editor:
+    fontSize: 13
+    invisibles: {}
+    scrollPastEnd: true
+    showInvisibles: true
+  "exception-reporting":
+    userId: "c67d9cbc-f763-89a8-5a3f-26f1ba62ecd2"
+  "git-diff":
+    showIconsInEditorGutter: true
+  linter:
+    showErrorPanel: false
+  minimap:
+    plugins:
+      codeglance: true
+      codeglanceDecorationsZIndex: 0
+      cursorline: true
+      cursorlineDecorationsZIndex: 0
+      "find-and-replace": true
+      "find-and-replaceDecorationsZIndex": 0
+      "git-diff": true
+      "git-diffDecorationsZIndex": 0
+      "highlight-selected": true
+      "highlight-selectedDecorationsZIndex": 0
+      linter: true
+      linterDecorationsZIndex: 0
+      "minimap-hide": true
+      "minimap-hideDecorationsZIndex": 0
+  "symbols-tree-view":
+    autoHide: true
+    autoToggle: true
+  "todo-manager": {}
+  "tree-view":
+    showOnRightSide: true
+  welcome:
+    showOnStartup: false

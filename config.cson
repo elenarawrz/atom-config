@@ -16,7 +16,7 @@
     ]
     openEmptyEditorOnStart: false
   editor:
-    fontSize: 13
+    fontSize: 11
     invisibles: {}
     scrollPastEnd: true
     showInvisibles: true
@@ -24,8 +24,7 @@
     userId: "c67d9cbc-f763-89a8-5a3f-26f1ba62ecd2"
   "git-diff":
     showIconsInEditorGutter: true
-  linter:
-    showErrorPanel: false
+  linter: {}
   minimap:
     plugins:
       codeglance: true

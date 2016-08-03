@@ -17,9 +17,11 @@
     openEmptyEditorOnStart: false
   editor:
     fontSize: 11
-    invisibles: {}
+    invisibles:
+      tab: "—"
     scrollPastEnd: true
     showInvisibles: true
+    tabType: "hard"
   "exception-reporting":
     userId: "c67d9cbc-f763-89a8-5a3f-26f1ba62ecd2"
   "git-diff":

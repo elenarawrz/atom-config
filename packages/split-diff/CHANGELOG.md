@@ -1,3 +1,85 @@
+## 1.2.1 - 2017-03-17
+* Fixed uncaught type error #93 - thanks Greenek!
+* Fixed uncaught reference error #96 - thanks Greenek!
+
+## 1.2.0 - 2017-02-20
+* Added option to automatically hide Tree View while diffing #82
+* Added information about style customization to README
+
+## 1.1.4 - 2017-02-12
+* Rerelease changes made for v1.1.2 but scoped to Atom v1.14 and greater
+
+## 1.1.3 - 2017-02-12
+* Fixed error in Atom v1.13 due to MarkerLayer bug (rollback changes) #92
+
+## 1.1.2 - 2017-02-09
+* Fixed marker deprecation warnings due to an optional property removal in 1.8 #87
+* Added service API for getting marker layers and related metadata
+
+## 1.1.1 - 2017-01-09
+* Fixed styling deprecation warnings due to removal of shadow DOM #86
+
+## 1.1.0 - 2016-11-29
+* Added ability to diff active file with right click in tree view or tab header #9
+* Fixed toggling ignore whitespace via command not updating its state in the footer bar
+* Fixed issue where one line editor would always pop notification about differing line endings
+* Fixed word diff not working for line diffed against an empty line
+* Fixed wrong current selection counter after copying last chunk to other editor
+* Fixed poor user experience when auto opening text editors in new panes (Now tries to reuse panes more often instead of greedily creating new ones)
+* Large code refactor
+
+## 1.0.6 - 2016-10-24
+* Fixed next/prev diff highlight skipping a selection after copying to right/left
+* Added keybinding for copy to left/right and scoped it to just the editors #73
+
+## 1.0.5 - 2016-10-05
+* Added option to mute warning notifications
+* Updated option for scroll syncing to be able to turn off all syncing #68
+* Changed package to no longer disable soft wrap while diffing #71
+
+## 1.0.4 - 2016-08-13
+* Added keybinding for toggle #64 - thanks moritamori!
+* Changed next/prev diff command to toggle package if not enabled #66
+* Fixed diff hanging when diffing files containing json/xml #65
+* Fixed uncaught exception when pressing copy chunk button before diff finished
+* Fixed uncaught exception when pressing next/prev button before diff finished
+
+## 1.0.3 - 2016-06-20
+* Reintroduced one second delay to the loading modal #62
+
+## 1.0.2 - 2016-06-03
+* Actually fixed line ending normalization for git repo #39 - thanks IceOnFire!
+
+## 1.0.1 - 2016-06-01
+* Fixed Uncaught TypeError when trying to highlight word diff #60
+* Fixed new pane not using same line endings as first pane for git repo #39
+* Fixed last chunk not being the same size which caused misalignment of editors #58
+
+## 1.0.0 - 2016-05-26
+* Added a user interface!
+* Added help notification when user fails the copy command
+* Added new pane opened by package will use same line endings as first pane (except for git panes) #39
+* Removed notifications on enable/disable #57
+* Changed next/prev diff command to move cursor with it so copy commands are easy #51
+* Fixed error when trying to copy last chunk when it didn't have a match #50
+* Fixed ignore whitespace not affecting the diff outcome #52
+* Fixed Uncaught TypeError when trying to highlight word diff #49
+* Fixed pane not getting destroyed if auto-opened editor was last item in it #48
+
+## 0.8.3 - 2016-05-16
+* Fixed loading modal appearing forever after diff computes quickly (remove one second delay) #47
+
+## 0.8.2 - 2016-05-16
+* Fixed left editor remains soft wrapped #46
+* Fixed "Copy to Left" command not working #45
+
+## 0.8.1 - 2016-05-14
+* Remove typo in main package file #44 - thanks valepu!
+
+## 0.8.0 - 2016-05-13
+* Added "Copy to Right" and "Copy to Left" palette commands, which partially adds #14
+* Fixed error when trying to diff using a non-git repo #43
+
 ## 0.7.5 - 2016-04-21
 * Improved highlighting performance
 * Fixed diffing huge files freezes editor #6
@@ -87,7 +169,7 @@
 * Added keywords for finding this package easier in atom's package collection
 
 ## 0.3.2 - 2015-09-23
-* Updated README with demonstration gif
+* Updated README with demo gif
 
 ## 0.3.1 - 2015-09-23
 * Fixed package compile errors

@@ -1,0 +1,50 @@
+#/pages
+get:
+  tags:
+    - pages
+  summary: Gets list of pages
+  operationId: getPages
+  consumes: []
+  responses:
+    '200':
+      description: OK
+      schema:
+        type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/definitions/PageListItem'
+    default:
+      $ref: '#/responses/DefaultError'
+
+post:
+  tags:
+    - pages
+  summary: Creates a page
+  operationId: createPage
+  consumes:
+    - application/json
+    - text/json
+    - application/x-www-form-urlencoded
+  parameters:
+    - name: page
+      in: body
+      description: Page model
+      required: true
+      schema:
+        type: object
+        properties:
+          data:
+            $ref: '#/definitions/Page'
+  responses:
+    '200':
+      description: OK
+      schema:
+        type: object
+        properties:
+          data:
+            type: string
+            description: GUID of newly created page
+    default:
+      $ref: '#/responses/DefaultError'

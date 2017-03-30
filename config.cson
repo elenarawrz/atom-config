@@ -1,32 +1,57 @@
 "*":
+  "activate-power-mode":
+    autoToggle: false
   "atom-beautify":
-    _analyticsUserId: "760caa09-d8b4-4929-b907-40d82ee86824"
-    beautifyEntireFileOnSave: false
-    cfml_preserve_newlines: false
-    css_indent_comments: false
-    css_newline_between_rules: true
+    cfml:
+      preserve_newlines: false
+    css:
+      indent_comments: false
+      newline_between_rules: true
     general:
-      _analyticsUserId: "ded55c67-99e3-4b6c-be6e-8fa7d253cbe2"
-    html_indent_inner_html: true
-    js_end_with_comma: true
+      _analyticsUserId: "760caa09-d8b4-4929-b907-40d82ee86824"
+      beautifyEntireFileOnSave: false
+    html:
+      indent_inner_html: true
+    js:
+      end_with_comma: true
+  autosave:
+    enabled: true
+  "bottom-dock": {}
   core:
     closeEmptyWindows: false
     disabledPackages: [
       "git-history"
+      "tree-view-filter"
+      "minimap"
+      "atom-shortcuts"
+      "react"
+      "minimap-linter"
+      "minimap-highlight-selected"
+      "minimap-hide"
+      "minimap-git-diff"
+      "minimap-find-and-replace"
+      "minimap-cursorline"
+      "minimap-codeglance"
     ]
     openEmptyEditorOnStart: false
+    telemetryConsent: "limited"
+    themes: [
+      "one-dark-ui"
+      "monokai"
+    ]
   editor:
-    fontSize: 11
+    fontSize: 12
     invisibles:
       tab: "—"
     scrollPastEnd: true
     showInvisibles: true
-    tabType: "hard"
   "exception-reporting":
     userId: "c67d9cbc-f763-89a8-5a3f-26f1ba62ecd2"
   "git-diff":
     showIconsInEditorGutter: true
-  linter: {}
+  "git-plus": {}
+  linter:
+    showErrorPanel: false
   minimap:
     plugins:
       codeglance: true
@@ -43,11 +68,23 @@
       linterDecorationsZIndex: 0
       "minimap-hide": true
       "minimap-hideDecorationsZIndex": 0
+  navigate:
+    f1: "http://devdocs.io/#q=&searchterm"
+    f10: "https://duckduckgo.com/?q=&searchterm"
+    f6: "http://www.bing.com/search?q=&searchterm"
+  "node-debugger":
+    debugPort: 8000
+  "simple-drag-drop-text":
+    copyKey: "meta"
   "symbols-tree-view":
     autoHide: true
     autoToggle: true
   "todo-manager": {}
   "tree-view":
+    hideVcsIgnoredFiles: true
     showOnRightSide: true
+  "tree-view-filter":
+    caseInsensitive: true
+    liveUpdate: true
   welcome:
     showOnStartup: false

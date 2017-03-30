@@ -135,6 +135,13 @@
     .pdf-icon;
   }
 
+  // PHP files
+  span.icon[data-name$='.php']:before,
+  span.icon[data-name$='.phar']:before,
+  span.icon[data-name$='.phtml']:before {
+    .php-icon;
+  }
+
   // Log files
   .file-icon-log:before,
   span.icon[data-name$='.log']:before {
@@ -225,6 +232,7 @@
   span.icon[data-name='Gulpfile.coffee']:before,
   span.icon[data-name='gulpfile.coffee']:before,
   span.icon[data-name='Gulpfile.js']:before,
+  span.icon[data-name='gulpfile.babel.js']:before, 
   span.icon[data-name='gulpfile.js']:before {
     .gulp-icon;
   }
@@ -242,6 +250,7 @@
 
   // Specs
   span.icon[data-name$='spec.rb']:before,
+  span.icon[data-name$='test.rb']:before,
   span.icon[data-name$='-spec.coffee']:before,
   span.icon[data-name$='spec.exs']:before,
   span.icon[data-name$='test.exs']:before {
@@ -257,6 +266,18 @@
   span.icon[data-name$='.jsx']:before,
   span.icon[data-name$='.cjsx']:before {
     .react-icon;
+  }
+
+  // Factory files
+  span.icon[data-name$='_factory.rb']:before,
+  span.icon[data-name$='_fabricator.rb']:before,
+  span.icon[data-name$='_fixture.rb']:before {
+    .factory-icon;
+  }
+
+  // Groovy files
+  span.icon[data-name$='.groovy']:before {
+    .groovy-icon;
   }
 
   // Fixup for devicons

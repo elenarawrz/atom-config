@@ -8,27 +8,38 @@
       "nonWordCharacters": "/\\()\"':,.;<>~!@#%^&*|+=[]{}`?-…"
     }
   },
+  ".source.inside-js.css.styled": {
+  "editor": {
+    "commentStart": "${/* ",
+    "commentEnd": "*/}"
+  }
+  },
   ".meta.tag.jsx": {
     "editor": {
-      "commentStart": "{/*",
-      "commentEnd": "*/}"
+      "commentStart": "{/* ",
+      "commentEnd": " */}"
     }
   },
   ".JSXAttrs": {
     "editor": {
-      "commentStart": "//"
+      "commentStart": "// "
     }
   },
   ".meta.embedded.expression.commented-out.jsx": {
     "editor": {
-      "commentStart": "{/*",
-      "commentEnd": "*/}"
+      "commentStart": "{/* ",
+      "commentEnd": " */}"
     }
   },
   ".JSXNested": {
     "editor": {
-      "commentStart": "{/*",
-      "commentEnd": "*/}"
+      "commentStart": "{/* ",
+      "commentEnd": " */}"
+    }
+  },
+  ".graphql": {
+    "editor": {
+      "commentStart": "# "
     }
   }
 }

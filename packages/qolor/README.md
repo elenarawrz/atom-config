@@ -1,6 +1,11 @@
 # Qolor
 
-An atom package to color your queries!
+[![Join the chat at https://gitter.im/qolor-atom/Lobby](https://badges.gitter.im/qolor-atom/Lobby.svg)](https://gitter.im/qolor-atom/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+![](https://img.shields.io/apm/dm/qolor.svg)
+![](https://img.shields.io/apm/v/qolor.svg)
+[![Build Status](https://travis-ci.org/DavidLGoldberg/qolor.svg?branch=master)](https://travis-ci.org/DavidLGoldberg/qolor)
+
+An atom package to color your SQL queries!
 
 Qolor applies semantic highlighting to your SQL queries by matching tables to
 their aliases.
@@ -32,10 +37,28 @@ I only built it to facilitate pull requests etc.
 
 Go to Atom -> Open Your Keymap and enter the following:
 
-    'atom-workspace':
-      'ctrl-alt-q': 'qolor:toggle'
+```coffeescript
 
-    # Careful, don't override your existing 'atom-workspace'!
+'atom-workspace':
+  'ctrl-alt-q': 'qolor:toggle'
+
+# Careful, don't override your existing 'atom-workspace'!
+
+```
+
+## How to Auto Associate File Types in Atom
+
+Go to Atom -> 'Init Script...' and add in:
+
+```coffeescript
+
+# This example associates all mustache files with 'SQL (Mustache)'.
+atom.workspace.observeTextEditors (editor) ->
+  if editor.getPath()?.match(/\.mustache$/)
+    editor.setGrammar(atom.grammars.grammarForScopeName('source.sql.mustache'))
+
+```
+
 
 ## Prior Art / Related Works
 
@@ -74,9 +97,6 @@ Your performance should be unaffected because qolor utilizes the debounced api
 for observing the grammar and because well, computers are fast.
 
 ## TODO
-
-*   [BUG] Table and aliases with numbers see this [issue](https://github.com/atom/language-sql/issues/30).
-This was working and will probably be fixed, so not going to make a workaround.
 
 *   [BUG] Cartesian products / cross joins don't work.
 They are particularly troublesome without aliases.  This is due to existing

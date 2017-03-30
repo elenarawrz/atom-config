@@ -14,7 +14,7 @@ class QolorView extends HTMLElement
     initialize: () ->
         @subscriptions = new CompositeDisposable
         @subscriptions.add atom.workspace.observeTextEditors (editor) =>
-            disposable = editor.onDidStopChanging =>
+            disposable = editor.onDidStopChanging => # only when an edit
                 @testMode = editor.buffer # set if any of the editors have it :\
                     # check exists (?'s) for new file case
                     ?.file?.path.includes 'qolor/spec/fixtures/'
@@ -25,7 +25,7 @@ class QolorView extends HTMLElement
 
             # watch for the appropriate language (grammar's scopeName)
             @subscriptions.add editor.onDidChangeGrammar =>
-                @update(editor)
+                @update editor
 
             @subscriptions.add atom.config.onDidChange 'qolor.fourBorders', =>
                 @update editor
@@ -78,8 +78,14 @@ class QolorView extends HTMLElement
         text = editor.getText()
         editorView = atom.views.getView(editor)
 
+        # This is in place for temp tables
+        # Seems to be mostly a safe one off.
+        # NOTE: (##) denotes a global temporary object.
+        # NOTE: subsequent characters include '#' e.g.,
+        # #names#allow#number#signs
+        # https://social.msdn.microsoft.com/Forums/sqlserver/en-US/154c19c4-95ba-4b6f-b6ca-479288feabfb/characters-that-are-not-allowed-in-table-name-column-name-in-sql-server-?forum=databasedesign
         getClass = (name) ->
-            "qolor-name-#{name}"
+            "qolor-name-#{name}".replace(/#/g, '__hash__')
 
         getColor = (name) ->
             md5(name)[..5]
@@ -94,6 +100,7 @@ class QolorView extends HTMLElement
             if atom.config.get 'qolor.fourBorders'
                 borderStyle = "border: 2px solid ##{color};"
             styleNode.innerHTML = """
+                /* qolor styles */
                 .highlight.#{className} .region {
                     /* reset the values: */
                     border: none;
@@ -102,12 +109,19 @@ class QolorView extends HTMLElement
                     #{borderStyle}
                 }
             """
-            editorView.stylesElement.appendChild styleNode
+            # TODO: Remove the "old stable path" soon.
+            if editorView.stylesElement # for old (stable) atom
+                editorView.stylesElement.appendChild styleNode
 
-            # return a disposable for easy removal
-            return new Disposable ->
-                styleNode.parentNode.removeChild(styleNode)
-                styleNode = null
+                return new Disposable ->
+                    styleNode.parentNode.removeChild(styleNode)
+                    styleNode = null
+            else # new beta channel code
+                editorView.styles.addStyleElement styleNode
+
+                return new Disposable ->
+                    editorView.styles.removeStyleElement styleNode
+                    styleNode = null
 
         registerAlias = (tableName, alias) =>
             if alias.match /.*\(.*\).*/
@@ -154,14 +168,15 @@ class QolorView extends HTMLElement
                 (if parsedTable.hasBrackets then 2 else 0)
                 # trailing.length: (don't need it thus far)
 
-            return [(editor.markBufferRange new Range(start, finish),
-                type: 'qolor')
+            return [(editor.markBufferRange new Range(start, finish))
                 , className]
 
-        decorateAlias = (token, lineNum, tokenPos) =>
+        decorateAlias = (token, lineNum, tokenPos, afterAsClause=false) =>
             # NOTE: Assert: Is 2ND PASS ("aliases") ONLY!
-            tokenValue = token.value.trim().toLowerCase()
+            tokenValueLeft = token.value.trimLeft().toLowerCase()
             originalTokenLength = token.value.length
+            lengthDiff = originalTokenLength - tokenValueLeft.length
+            tokenValue = token.value.trim().toLowerCase()
 
             if !@aliasesForEditor[editor.id][tokenValue]
                 # only if it's a bogus alias...
@@ -170,11 +185,12 @@ class QolorView extends HTMLElement
             className = getClass @aliasesForEditor[editor.id][tokenValue]
 
             return [(editor.markBufferRange new Range(
-                new Point(lineNum, tokenPos),
-                new Point(lineNum, tokenPos + originalTokenLength)),
-                type: 'qolor')
-                , className]
+                # The following's afterAsClause is used to not highlight "as"
+                # But keep alias and table as one underline in other cases.
+                new Point(lineNum, tokenPos + (afterAsClause ? lengthDiff : 0)),
+                new Point(lineNum, tokenPos + originalTokenLength))), className]
 
+        afterAsClause  = false
         decorateNext = false # used by tablesTraverser
         justDecorated = '' # used by tablesTraverser
         tablesTraverser = (token, lineNum, tokenPos) =>
@@ -185,7 +201,9 @@ class QolorView extends HTMLElement
             tokenValue = token.value.trim().toLowerCase()
 
             if justDecorated
-                if token.scopes.length > 1 # no keywords etc.
+                if 'keyword.other.alias.sql' in token.scopes
+                    afterAsClause = true
+                else if token.scopes.length > 1 # no keywords etc.
                     decorateNext = shouldDecorateNext(tokenValue)
 
                     # Handles case for no alias treat the table as
@@ -194,8 +212,10 @@ class QolorView extends HTMLElement
                     aliasReturn = [null, null]
                 else if tokenValue # instead schema aliases have no token :\
                     registerAlias justDecorated, tokenValue
-                    aliasReturn = decorateAlias token, lineNum, tokenPos
-                justDecorated = ''
+                    aliasReturn = decorateAlias token, lineNum, tokenPos,
+                        afterAsClause
+                if !afterAsClause
+                    justDecorated = ''
                 return aliasReturn || [null, null]
 
             if decorateNext
@@ -251,6 +271,7 @@ class QolorView extends HTMLElement
                         @markersForEditor[editor.id].push marker
 
                         editor.decorateMarker marker,
+                            isQolor: true,
                             type: 'highlight'
                             class: className
 

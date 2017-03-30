@@ -1,3 +1,9 @@
+### 0.3.2 - 2/9/17
+- Removes shadowRoot reference
+
+### 0.3.1 - 4/24/16
+- Fixed running with no shadow dom
+
 ### 0.2.3 - 4/2/15
 - Fixed exception on drop
 

@@ -19,7 +19,8 @@ describe "QolorView", ->
             grammar = atom.grammars.grammarForScopeName 'source.sql'
             editor.setGrammar(grammar)
 
-            markers = editor.findMarkers(type: 'qolor')
+            markers = (decoration.getMarker() for decoration in editor
+                .getHighlightDecorations({isQolor: true}))
             name = markers[marker.index]
                 .getBufferRange()
             expect(name.start.row).toBe marker.start.row
@@ -46,8 +47,9 @@ describe "QolorView", ->
                 grammar = atom.grammars.grammarForScopeName 'source.sql'
                 editor.setGrammar(grammar)
 
-                markers = editor.findMarkers(type: 'qolor')
-                name = markers[0] # just use the first test case from below
+                markers = (decoration.getMarker() for decoration in editor
+                    .getHighlightDecorations({isQolor: true}))
+                name = markers[2] # just use one of the test cases
                     .getBufferRange()
                 expect(name.start.row).toBe 0
                 expect(name.start.column).toBe 7
@@ -109,27 +111,44 @@ describe "QolorView", ->
     describe 'alias before table is defined', ->
         it 'has marker for alias "d" despite appearing before defined', ->
             markerCheck 'alias-before-defined.sql',
-                index: 0
+                index: 1 # aliases will be defined after
                 start: { row: 0, column: 7 }
                 end:   { row: 0, column: 8 }
         it 'has a marker @ "defined_later d"', ->
             markerCheck 'alias-before-defined.sql',
-                index: 1
+                index: 0
                 start: { row: 0, column: 18 }
                 end:   { row: 0, column: 33 }
+
+    describe 'alias with "as" keyword', ->
+        it 'has marker for alias "d" despite appearing before defined', ->
+            markerCheck 'alias-with-as.sql',
+                index: 2
+                start: { row: 0, column: 7 }
+                end:   { row: 0, column: 8 }
+        it 'has a marker @ "defined_later"', ->
+            markerCheck 'alias-with-as.sql',
+                index: 0
+                start: { row: 0, column: 18 }
+                end:   { row: 0, column: 31 }
+        it 'has marker for alias "d"', ->
+            markerCheck 'alias-with-as.sql',
+                index: 1
+                start: { row: 0, column: 35 }
+                end:   { row: 0, column: 36 }
 
     describe 'from statement with temp table', ->
         it 'has marker @ "temp1" despite schema', ->
             markerCheck 'temp-table-1.sql',
                 index: 0
-                start: { row: 0, column: 15 }
+                start: { row: 0, column: 14 }
                 end:   { row: 0, column: 20 }
 
     describe 'into statement with temp table', ->
         it 'has marker @ "temp2 tmp2" despite schema', ->
             markerCheck 'temp-table-2.sql',
                 index: 0
-                start: { row: 0, column: 15 }
+                start: { row: 0, column: 14 }
                 end:   { row: 0, column: 25 }
 
     describe 'insert into statement', ->
@@ -152,31 +171,34 @@ describe "QolorView", ->
                 , true
 
     describe 'insert into statement breaks with space', ->
-        it 'has marker @ "f"', ->
-            markerCheck 'insert-into-2-does-not-break.sql',
-                index: 0
-                start: { row: 0, column: 7 }
-                end:   { row: 0, column: 8 }
+        # Tables are indexed first
         it 'has marker @ "foo f"', ->
             markerCheck 'insert-into-2-does-not-break.sql',
-                index: 1
+                index: 0
                 start: { row: 0, column: 18 }
                 end:   { row: 0, column: 23 }
+        it 'has marker @ "insert_table"', ->
+            markerCheck 'insert-into-2-does-not-break.sql',
+                index: 1
+                start: { row: 3, column: 12 }
+                end:   { row: 3, column: 24 }
+
+        # Aliases are indexed later
         it 'has marker @ "f"', ->
             markerCheck 'insert-into-2-does-not-break.sql',
                 index: 2
+                start: { row: 0, column: 7 }
+                end:   { row: 0, column: 8 }
+        it 'has marker @ "f"', ->
+            markerCheck 'insert-into-2-does-not-break.sql',
+                index: 3
                 start: { row: 0, column: 30 }
                 end:   { row: 0, column: 31 }
         it 'has marker @ "f"', ->
             markerCheck 'insert-into-2-does-not-break.sql',
-                index: 3
+                index: 4
                 start: { row: 0, column: 38 }
                 end:   { row: 0, column: 39 }
-        it 'has marker @ "insert_table"', ->
-            markerCheck 'insert-into-2-does-not-break.sql',
-                index: 4
-                start: { row: 3, column: 12 }
-                end:   { row: 3, column: 24 }
 
     describe 'join statement', ->
         describe 'tables expression', ->
@@ -187,19 +209,19 @@ describe "QolorView", ->
                     end:   { row: 0, column: 18 }
             it 'has marker @ "foo f"', ->
                 markerCheck 'join-statement.sql',
-                    index: 3
+                    index: 1
                     start: { row: 0, column: 39 }
                     end:   { row: 0, column: 44 }
 
         describe 'on expression', ->
             it 'has marker for alias (lhs) "p"', ->
                 markerCheck 'join-statement.sql',
-                    index: 1
+                    index: 2
                     start: { row: 0, column: 22 }
                     end:   { row: 0, column: 23 }
             it 'has marker for alias (rhs) "f"', ->
                 markerCheck 'join-statement.sql',
-                    index: 2
+                    index: 3
                     start: { row: 0, column: 29 }
                     end:   { row: 0, column: 30 }
             it 'has marker for alias (lhs) "f"', ->
@@ -282,19 +304,20 @@ describe "QolorView", ->
     describe 'from statement with schemas', ->
         it 'has alias marker @ "tab" despite schema and defined after', ->
             markerCheck 'schema-base-case.sql',
-                index: 0
+                index: 2
                 start: { row: 0, column: 7 }
                 end:   { row: 0, column: 10 }
         it 'has table marker @ "myTable" despite schema', ->
             markerCheck 'schema-base-case.sql',
-                index: 1
+                index: 0
                 start: { row: 0, column: 31 }
                 end:   { row: 0, column: 38 }
         it 'has alias marker @ " tab" despite schema', ->
             markerCheck 'schema-base-case.sql',
-                index: 2
+                index: 1
                 start: { row: 0, column: 38 }
                 end:   { row: 0, column: 42 }
+
         it 'has table marker @ "myTable" despite schema', ->
             markerCheck 'schema-base-case-no-alias.sql',
                 index: 0
@@ -313,8 +336,7 @@ describe "QolorView", ->
                 start: { row: 0, column: 21 }
                 end:   { row: 0, column: 28 }
 
-    # Currently the language-sql breaks on numbers but this should be fixed soon
-    xdescribe 'numbers in tables or aliases', ->
+    describe 'numbers in tables or aliases', ->
         it 'has marker @ "test2 t2"', ->
             markerCheck 'numbers.sql',
                 index: 0
